@@ -8,4 +8,207 @@ output: html_document
 # Purpose
 In the first session, we explore the very basic functions of R for biostatistics and also have a glance over GitHub.
 
+# Installing and loading packages
+You can install packages using __*install.packages()*__ function. The important thing is that you should put the package name into quotation marks:
+```{r, eval=FALSE}
+install.packages("tidyverse")
+```
+
+To install multiple packages, you should use concatenate function __*c()*__:
+```{r, eval=FALSE}
+install.packages(c("tidyverse", "metafor", "FactoMineR"))
+```
+
+Another way is to use RStudio graphical interface: **Tools -> Install Packages**.
+
+After installing, to use the package, you should load it using __*library()*__ function:
+```{r, eval=FALSE}
+library(tidyverse)
+```
+
+Note that loading a package doesn't require quotation marks.
+
+# Getting and setting the working directory
+The first step of almost every project is to set the working directory in order to have reproducible workflow.
+
+To *get* the current working directory (*wd*), we use __*getwd()*__ function:
+```{r}
+getwd()
+```
+
+To *set* our desired wd, we use __*setwd()*__. In this function, we should specify the path, for example:
+```{r}
+setwd("/home/ahmad/Documents/GitHub/R-McMasterU/01 - R Basics + GitHub/")
+```
+
+However, using *setwd* has some drawbacks which makes it irreproducible. For example, if you want to use the code on some other computer or change directory names, you could face some difficulties. These problems can be solved by making an *rproj* file but not everyone uses RStudio. Another way that I recommend is to use __*here()*__ function. You should download and install it first:
+```{r, eval=FALSE}
+install.packages("here")
+library(here)
+```
+
+```{r, echo=FALSE}
+library(here)
+```
+
+
+And then by using the __*here()*__ function, the working directory will be set to the directory where our *.R* or *.Rmd* file is located.
+```{r}
+here()
+```
+
+You can also use it inside other functions:
+```{r, eval=FALSE}
+here("one", "two", "McMaster.R")
+```
+
+
+You also can use just a particular function from a package:
+```{r, eval=FALSE}
+dplyr::filter()
+```
+
+There are some built-in datasets in R. You can access to the list with __*data()*__ function:
+```{r}
+data()
+```
+
+And to load a built-in dataset, we use the same function with the dataset name in it:
+```{r}
+data(mtcars)
+```
+
+# Data types
+There are 6 data types in R:
+- character: "a", "swc"
+- numeric: 2, 15.5
+- integer: 2L (the L tells R to store this as an integer)
+- logical: TRUE, FALSE
+- complex: 1+4i (complex numbers with real and imaginary parts)
+
+We use __*typeof()*__ function to know the object's data type:
+```{r}
+typeof(T)
+```
+
+__*class()*__ function can also be used to determine the high-level type of object. We also have __*mode()*__ and __*storage.mode()*__ functions. To know more about the differences, please take a look at the following codes:
+```{r}
+x <- 1L
+print(c(class(x), mode(x), storage.mode(x), typeof(x)))
+
+x <- 1
+print(c(class(x), mode(x), storage.mode(x), typeof(x)))
+
+x <- letters
+print(c(class(x), mode(x), storage.mode(x), typeof(x)))
+
+x <- TRUE
+print(c(class(x), mode(x), storage.mode(x), typeof(x)))
+
+x <- cars
+print(c(class(x), mode(x), storage.mode(x), typeof(x)))
+
+x <- cars[1]
+print(c(class(x), mode(x), storage.mode(x), typeof(x)))
+
+x <- cars[[1]]
+print(c(class(x), mode(x), storage.mode(x), typeof(x)))
+
+x <- matrix(cars)
+print(c(class(x), mode(x), storage.mode(x), typeof(x)))
+
+x <- new.env()
+print(c(class(x), mode(x), storage.mode(x), typeof(x)))
+
+x <- expression(1 + 1)
+print(c(class(x), mode(x), storage.mode(x), typeof(x)))
+
+x <- quote(y <- 1 + 1)
+print(c(class(x), mode(x), storage.mode(x), typeof(x)))
+
+x <- ls
+print(c(class(x), mode(x), storage.mode(x), typeof(x)))
+```
+
+## Data structures in R
+- atomic vector
+- list
+- matrix
+- data frame
+- factors
+
+## Converting data types
+To convert data types, we use these functions:
+- __*as.logical()*__
+- __*as.numeric()*__
+- __*as.character()*__
+- __*as.factor()*__
+
+
+# Reading data
+## .csv files
+R has a built-in function for reading .csv files. __*read.csv()*__ is a wrapper function for __*read.table()*__ that mandates a comma as separator and uses the input file's first line as header that specifies the table's column names.
+
+An example:
+```{r, eval=FALSE}
+csv_file = read.csv(file = "path_in_quotation",
+                    header = FALSE,
+                    sep = "", 
+                    quote = "\"'",
+                    na.strings = "NA",
+                    stringsAsFactors = FALSE,
+                    encoding = "unknown")
+```
+
+## .xlsx files
+I prefer to use __*read.xlsx()*__ function. You should install and load *openxlsx* package first:
+```{r, eval=FALSE}
+install.packages("openxlsx")
+library(openxlsx)
+```
+
+And now read the .xlsx file:
+```{r, eval=FALSE}
+xlsx_file = read.xlsx(xlsxFile = "path_in_quotation",
+                      sheet = sheetnumber,
+                      startRow = 1,
+                      na.strings = "NA")
+```
+
+
+## .dta files
+.dta is the file format that STATA uses. To read it, we need another package. *haven*, *readstata13*, and *foreign* are all good. I have used *readstata13* and *foreign* for my projects. *foreign* is better in that sense that it has functions to read other formats for popular statistical software such as SAS or SPSS. So, we go with *foreign*.
+First, installing and loading it:
+```{r, eval=FALSE}
+install.packages("foreign")
+library(foreign)
+```
+
+And then, using __*read.dta*__ to read our file:
+```{r, eval=FALSE}
+dta_file = read.dta(file = "path_in_quotation")
+```
+
+# Writing data
+For almost all read.something() function, we have write.thatthing() function as well. We will learn how to use write functions where needed.
+
+# Creating data in native R environment
+We also can create data in R environment, almost every data type.
+## Vectors
+Vectors are one-dimensional data sets and easiest to create. Here are all the ways we can do so:
+```{r}
+c(1, 2, 3)
+2:5
+seq(2, 3, by = 0.5)
+rep(1:2, times = 3)
+rep(1:2, each = 3)
+```
+## Matrixes
+
+## Lists
+
+## Data frames
+
+# Selecting data
+
 # Exploratory data analysis using R

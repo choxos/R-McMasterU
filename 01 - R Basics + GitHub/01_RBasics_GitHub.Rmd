@@ -204,11 +204,171 @@ rep(1:2, times = 3)
 rep(1:2, each = 3)
 ```
 ## Matrixes
+Matrix is a two dimensional data structure. We create a matrix with the __*matrix()*__ function:
+```{r}
+matrix(data = NA,
+       nrow = 1,
+       ncol = 1,
+       dimnames = NULL)
+```
+
 
 ## Lists
+A list is collection of elements which can be of different types. We use the __*list()*__ function to create lists:
+```{r}
+list(x = 1:5,
+     y = c("a", "b", "c"),
+     z = TRUE,
+     s = 1+4i)
+```
+
 
 ## Data frames
+A special case of a list where all elements are the same length. The function is __*data.frame()*__:
+```{r}
+data.frame(x = 1:3,
+           y = c("a", "b", "c"))
+```
 
-# Selecting data
 
-# Exploratory data analysis using R
+# Selecting and subsetting data
+We can use *[]* to select and subset data which is a built-in R feature. We also can use __*select()*__ and __*filter()*__ functions from *dplyr* package (comes with *tidyverse* package). Here are examples:
+
+## Selecting vector elements
+By position:
+```{r}
+x = 1:10
+# The fourth element
+x[4]
+# All but the fourth.
+x[-4]
+# Elements two to four.
+x[2:4]
+# All elements except two to four.
+x[-(2:4)]
+# Elements one and five.
+x[c(1, 5)]
+```
+
+By value:
+```{r}
+x = -1:10
+# Elements which are equal to 10.
+x[x == 10]
+# All elements less than zero.
+x[x < 0]
+```
+
+Named vectors:
+For this, we first should assign names to our values with __*names()*__ function (pretty much like English, right?):
+```{r}
+x = c("Ahmad", "Sofi-Mahmudi")
+names(x) = c("First", "Last")
+# Element with name 'Last'.
+x["Last"]
+```
+
+
+## Selecting matrixes and data frames elements
+Matrix:
+```{r}
+x = 1:3
+# Create a matrix from x.
+m <- matrix(x, nrow = 3, ncol = 3)
+# Select a row
+m[2, ]
+# Select a column
+m[, 1]
+# Select an element
+m[2, 3]
+# Transpose
+t(m)
+# Matrix multiplication
+n <- matrix(x, nrow = 3, ncol = 3)
+m %*% n
+```
+
+Data frame:
+```{r}
+df <- data.frame(x = 1:3, y = c('a', 'b', 'c'))
+# List subsetting
+df$x
+df[[2]]
+# Select second column
+df[, 2]
+# Select second row
+df[2, ]
+# Select second column and second row
+df[2, 2]
+```
+
+
+## Selecting list elements
+```{r}
+l <- list(x = 1:5, y = c('a', 'b'))
+# Second element of l.
+l[[2]]
+# New list with only the first element.
+l[1]
+# Element named x
+l$x
+# New list with only element named y.
+l['y']
+```
+
+## Using dplyr
+*dplyr* has two functions for this: __*filter()*__ and __*select()*__. __*filter()*__ applies a condition on a variable whereas __*select()*__ selects variables from a data frame. Example:
+```{r}
+library(dplyr)
+# Loading mtcars dataset
+data(mtcars)
+# Select two variables: mpg, cyl
+select(mtcars, c(mpg, cyl))
+# Filter rows with mpg > 20 and cyl > 4
+filter(mtcars, mpg > 20 & cyl > 4)
+```
+
+
+# Git
+Git is a version controlling software. You can use GitHub Desktop (desktop.github.com) but here we take a glance on Git commands.
+
+## Setting up a Git folder
+First, changing directory to the one we want to set up Git in:
+```{r, eval=FALSE}
+cd myproject
+```
+
+Then, we use initialize a Git repository using __*init*__ function:
+```{r, eval=FALSE}
+git init
+```
+
+We create a file in the folder called *mcmaster.R*, but Git doesn't track it by default. To track it using Git, we use __*add*__ function:
+```{r, eval=FALSE}
+git add mcmaster.R
+```
+
+We use __*status*__ function to know the overall status of the files in the folder:
+```{r, eval=FALSE}
+git status
+```
+
+A commit is a record of what changes you have made since the last time you made a commit. Essentially, you make changes to your repo (for example, adding a file or modifying one) and then tell git to put those changes into a commit.
+We do that using the __*commit*__ function:
+```{r, eval=FALSE}
+git commit -m "Your message about the commit"
+```
+
+Note that you always need to have a title or message for your commit in order to know what have you done since the last commit. This will track your project perfectly and organizes your thoughts regarding what you changed.
+
+## GitHub
+Of course you want to use GitHub to work collaboratively in a team! So, using Git locally is not enough. After creating your repository on GitHub website, you use __*remote*__ function to grab that repo. It will automatically create a folder with the name of the repo:
+```{r, eval=FALSE}
+git remote add origin https://github.com/username/mynewrepository.git
+```
+
+Then, after we made changes and committed the changes, we need to __*push*__ it online. To do so, we do the following:
+```{r, eval=FALSE}
+git push -u origin master
+```
+

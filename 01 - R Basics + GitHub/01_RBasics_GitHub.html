@@ -11,7 +11,7 @@
 
 <meta name="author" content="Ahmad Sofi-Mahmudi" />
 
-<meta name="date" content="2022-09-11" />
+<meta name="date" content="2022-09-13" />
 
 <title>01 - R@McMasterU: R Basics + GitHub</title>
 
@@ -365,7 +365,7 @@ pre code {
 
 <h1 class="title toc-ignore">01 - <a href="mailto:R@McMasterU" class="email">R@McMasterU</a>: R Basics + GitHub</h1>
 <h4 class="author">Ahmad Sofi-Mahmudi</h4>
-<h4 class="date">2022-09-11</h4>
+<h4 class="date">2022-09-13</h4>
 
 </div>
 
@@ -545,8 +545,281 @@ file:</p>
 <pre class="r"><code>dta_file = read.dta(file = &quot;path_in_quotation&quot;)</code></pre>
 </div>
 </div>
-<div id="exploratory-data-analysis-using-r" class="section level1">
-<h1>Exploratory data analysis using R</h1>
+<div id="writing-data" class="section level1">
+<h1>Writing data</h1>
+<p>For almost all read.something() function, we have write.thatthing()
+function as well. We will learn how to use write functions where
+needed.</p>
+</div>
+<div id="creating-data-in-native-r-environment" class="section level1">
+<h1>Creating data in native R environment</h1>
+<p>We also can create data in R environment, almost every data type. ##
+Vectors Vectors are one-dimensional data sets and easiest to create.
+Here are all the ways we can do so:</p>
+<pre class="r"><code>c(1, 2, 3)</code></pre>
+<pre><code>## [1] 1 2 3</code></pre>
+<pre class="r"><code>2:5</code></pre>
+<pre><code>## [1] 2 3 4 5</code></pre>
+<pre class="r"><code>seq(2, 3, by = 0.5)</code></pre>
+<pre><code>## [1] 2.0 2.5 3.0</code></pre>
+<pre class="r"><code>rep(1:2, times = 3)</code></pre>
+<pre><code>## [1] 1 2 1 2 1 2</code></pre>
+<pre class="r"><code>rep(1:2, each = 3)</code></pre>
+<pre><code>## [1] 1 1 1 2 2 2</code></pre>
+<div id="matrixes" class="section level2">
+<h2>Matrixes</h2>
+<p>Matrix is a two dimensional data structure. We create a matrix with
+the <strong><em>matrix()</em></strong> function:</p>
+<pre class="r"><code>matrix(data = NA,
+       nrow = 1,
+       ncol = 1,
+       dimnames = NULL)</code></pre>
+<pre><code>##      [,1]
+## [1,]   NA</code></pre>
+</div>
+<div id="lists" class="section level2">
+<h2>Lists</h2>
+<p>A list is collection of elements which can be of different types. We
+use the <strong><em>list()</em></strong> function to create lists:</p>
+<pre class="r"><code>list(x = 1:5,
+     y = c(&quot;a&quot;, &quot;b&quot;, &quot;c&quot;),
+     z = TRUE,
+     s = 1+4i)</code></pre>
+<pre><code>## $x
+## [1] 1 2 3 4 5
+## 
+## $y
+## [1] &quot;a&quot; &quot;b&quot; &quot;c&quot;
+## 
+## $z
+## [1] TRUE
+## 
+## $s
+## [1] 1+4i</code></pre>
+</div>
+<div id="data-frames" class="section level2">
+<h2>Data frames</h2>
+<p>A special case of a list where all elements are the same length. The
+function is <strong><em>data.frame()</em></strong>:</p>
+<pre class="r"><code>data.frame(x = 1:3,
+           y = c(&quot;a&quot;, &quot;b&quot;, &quot;c&quot;))</code></pre>
+<pre><code>##   x y
+## 1 1 a
+## 2 2 b
+## 3 3 c</code></pre>
+</div>
+</div>
+<div id="selecting-and-subsetting-data" class="section level1">
+<h1>Selecting and subsetting data</h1>
+<p>We can use <em>[]</em> to select and subset data which is a built-in
+R feature. We also can use <strong><em>select()</em></strong> and
+<strong><em>filter()</em></strong> functions from <em>dplyr</em> package
+(comes with <em>tidyverse</em> package). Here are examples:</p>
+<div id="selecting-vector-elements" class="section level2">
+<h2>Selecting vector elements</h2>
+<p>By position:</p>
+<pre class="r"><code>x = 1:10
+# The fourth element
+x[4]</code></pre>
+<pre><code>## [1] 4</code></pre>
+<pre class="r"><code># All but the fourth.
+x[-4]</code></pre>
+<pre><code>## [1]  1  2  3  5  6  7  8  9 10</code></pre>
+<pre class="r"><code># Elements two to four.
+x[2:4]</code></pre>
+<pre><code>## [1] 2 3 4</code></pre>
+<pre class="r"><code># All elements except two to four.
+x[-(2:4)]</code></pre>
+<pre><code>## [1]  1  5  6  7  8  9 10</code></pre>
+<pre class="r"><code># Elements one and five.
+x[c(1, 5)]</code></pre>
+<pre><code>## [1] 1 5</code></pre>
+<p>By value:</p>
+<pre class="r"><code>x = -1:10
+# Elements which are equal to 10.
+x[x == 10]</code></pre>
+<pre><code>## [1] 10</code></pre>
+<pre class="r"><code># All elements less than zero.
+x[x &lt; 0]</code></pre>
+<pre><code>## [1] -1</code></pre>
+<p>Named vectors: For this, we first should assign names to our values
+with <strong><em>names()</em></strong> function (pretty much like
+English, right?):</p>
+<pre class="r"><code>x = c(&quot;Ahmad&quot;, &quot;Sofi-Mahmudi&quot;)
+names(x) = c(&quot;First&quot;, &quot;Last&quot;)
+# Element with name &#39;Last&#39;.
+x[&quot;Last&quot;]</code></pre>
+<pre><code>##           Last 
+## &quot;Sofi-Mahmudi&quot;</code></pre>
+</div>
+<div id="selecting-matrixes-and-data-frames-elements" class="section level2">
+<h2>Selecting matrixes and data frames elements</h2>
+<p>Matrix:</p>
+<pre class="r"><code>x = 1:3
+# Create a matrix from x.
+m &lt;- matrix(x, nrow = 3, ncol = 3)
+# Select a row
+m[2, ]</code></pre>
+<pre><code>## [1] 2 2 2</code></pre>
+<pre class="r"><code># Select a column
+m[, 1]</code></pre>
+<pre><code>## [1] 1 2 3</code></pre>
+<pre class="r"><code># Select an element
+m[2, 3]</code></pre>
+<pre><code>## [1] 2</code></pre>
+<pre class="r"><code># Transpose
+t(m)</code></pre>
+<pre><code>##      [,1] [,2] [,3]
+## [1,]    1    2    3
+## [2,]    1    2    3
+## [3,]    1    2    3</code></pre>
+<pre class="r"><code># Matrix multiplication
+n &lt;- matrix(x, nrow = 3, ncol = 3)
+m %*% n</code></pre>
+<pre><code>##      [,1] [,2] [,3]
+## [1,]    6    6    6
+## [2,]   12   12   12
+## [3,]   18   18   18</code></pre>
+<p>Data frame:</p>
+<pre class="r"><code>df &lt;- data.frame(x = 1:3, y = c(&#39;a&#39;, &#39;b&#39;, &#39;c&#39;))
+# List subsetting
+df$x</code></pre>
+<pre><code>## [1] 1 2 3</code></pre>
+<pre class="r"><code>df[[2]]</code></pre>
+<pre><code>## [1] &quot;a&quot; &quot;b&quot; &quot;c&quot;</code></pre>
+<pre class="r"><code># Select second column
+df[, 2]</code></pre>
+<pre><code>## [1] &quot;a&quot; &quot;b&quot; &quot;c&quot;</code></pre>
+<pre class="r"><code># Select second row
+df[2, ]</code></pre>
+<pre><code>##   x y
+## 2 2 b</code></pre>
+<pre class="r"><code># Select second column and second row
+df[2, 2]</code></pre>
+<pre><code>## [1] &quot;b&quot;</code></pre>
+</div>
+<div id="selecting-list-elements" class="section level2">
+<h2>Selecting list elements</h2>
+<pre class="r"><code>l &lt;- list(x = 1:5, y = c(&#39;a&#39;, &#39;b&#39;))
+# Second element of l.
+l[[2]]</code></pre>
+<pre><code>## [1] &quot;a&quot; &quot;b&quot;</code></pre>
+<pre class="r"><code># New list with only the first element.
+l[1]</code></pre>
+<pre><code>## $x
+## [1] 1 2 3 4 5</code></pre>
+<pre class="r"><code># Element named x
+l$x</code></pre>
+<pre><code>## [1] 1 2 3 4 5</code></pre>
+<pre class="r"><code># New list with only element named y.
+l[&#39;y&#39;]</code></pre>
+<pre><code>## $y
+## [1] &quot;a&quot; &quot;b&quot;</code></pre>
+</div>
+<div id="using-dplyr" class="section level2">
+<h2>Using dplyr</h2>
+<p><em>dplyr</em> has two functions for this:
+<strong><em>filter()</em></strong> and
+<strong><em>select()</em></strong>. <strong><em>filter()</em></strong>
+applies a condition on a variable whereas
+<strong><em>select()</em></strong> selects variables from a data frame.
+Example:</p>
+<pre class="r"><code>library(dplyr)</code></pre>
+<pre><code>## 
+## Attaching package: &#39;dplyr&#39;</code></pre>
+<pre><code>## The following objects are masked from &#39;package:stats&#39;:
+## 
+##     filter, lag</code></pre>
+<pre><code>## The following objects are masked from &#39;package:base&#39;:
+## 
+##     intersect, setdiff, setequal, union</code></pre>
+<pre class="r"><code># Loading mtcars dataset
+data(mtcars)
+# Select two variables: mpg, cyl
+select(mtcars, c(mpg, cyl))</code></pre>
+<pre><code>##                      mpg cyl
+## Mazda RX4           21.0   6
+## Mazda RX4 Wag       21.0   6
+## Datsun 710          22.8   4
+## Hornet 4 Drive      21.4   6
+## Hornet Sportabout   18.7   8
+## Valiant             18.1   6
+## Duster 360          14.3   8
+## Merc 240D           24.4   4
+## Merc 230            22.8   4
+## Merc 280            19.2   6
+## Merc 280C           17.8   6
+## Merc 450SE          16.4   8
+## Merc 450SL          17.3   8
+## Merc 450SLC         15.2   8
+## Cadillac Fleetwood  10.4   8
+## Lincoln Continental 10.4   8
+## Chrysler Imperial   14.7   8
+## Fiat 128            32.4   4
+## Honda Civic         30.4   4
+## Toyota Corolla      33.9   4
+## Toyota Corona       21.5   4
+## Dodge Challenger    15.5   8
+## AMC Javelin         15.2   8
+## Camaro Z28          13.3   8
+## Pontiac Firebird    19.2   8
+## Fiat X1-9           27.3   4
+## Porsche 914-2       26.0   4
+## Lotus Europa        30.4   4
+## Ford Pantera L      15.8   8
+## Ferrari Dino        19.7   6
+## Maserati Bora       15.0   8
+## Volvo 142E          21.4   4</code></pre>
+<pre class="r"><code># Filter rows with mpg &gt; 20 and cyl &gt; 4
+filter(mtcars, mpg &gt; 20 &amp; cyl &gt; 4)</code></pre>
+<pre><code>##                 mpg cyl disp  hp drat    wt  qsec vs am gear carb
+## Mazda RX4      21.0   6  160 110 3.90 2.620 16.46  0  1    4    4
+## Mazda RX4 Wag  21.0   6  160 110 3.90 2.875 17.02  0  1    4    4
+## Hornet 4 Drive 21.4   6  258 110 3.08 3.215 19.44  1  0    3    1</code></pre>
+</div>
+</div>
+<div id="git" class="section level1">
+<h1>Git</h1>
+<p>Git is a version controlling software. You can use GitHub Desktop
+(desktop.github.com) but here we take a glance on Git commands.</p>
+<div id="setting-up-a-git-folder" class="section level2">
+<h2>Setting up a Git folder</h2>
+<p>First, changing directory to the one we want to set up Git in:</p>
+<pre class="r"><code>cd myproject</code></pre>
+<p>Then, we use initialize a Git repository using
+<strong><em>init</em></strong> function:</p>
+<pre class="r"><code>git init</code></pre>
+<p>We create a file in the folder called <em>mcmaster.R</em>, but Git
+doesn’t track it by default. To track it using Git, we use
+<strong><em>add</em></strong> function:</p>
+<pre class="r"><code>git add mcmaster.R</code></pre>
+<p>We use <strong><em>status</em></strong> function to know the overall
+status of the files in the folder:</p>
+<pre class="r"><code>git status</code></pre>
+<p>A commit is a record of what changes you have made since the last
+time you made a commit. Essentially, you make changes to your repo (for
+example, adding a file or modifying one) and then tell git to put those
+changes into a commit. We do that using the
+<strong><em>commit</em></strong> function:</p>
+<pre class="r"><code>git commit -m &quot;Your message about the commit&quot;</code></pre>
+<p>Note that you always need to have a title or message for your commit
+in order to know what have you done since the last commit. This will
+track your project perfectly and organizes your thoughts regarding what
+you changed.</p>
+</div>
+<div id="github" class="section level2">
+<h2>GitHub</h2>
+<p>Of course you want to use GitHub to work collaboratively in a team!
+So, using Git locally is not enough. After creating your repository on
+GitHub website, you use <strong><em>remote</em></strong> function to
+grab that repo. It will automatically create a folder with the name of
+the repo:</p>
+<pre class="r"><code>git remote add origin https://github.com/username/mynewrepository.git</code></pre>
+<p>Then, after we made changes and committed the changes, we need to
+<strong><em>push</em></strong> it online. To do so, we do the
+following:</p>
+<pre class="r"><code>git push -u origin master</code></pre>
+</div>
 </div>
 
 
